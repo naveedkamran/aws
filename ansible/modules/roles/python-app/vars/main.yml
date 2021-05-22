@@ -1,0 +1,29 @@
+role_name: python-app
+dir_prod_data_role: "{{ dir_prod_data }}/{{ project_name }}/{{ role_name }}"
+docker_image: python:3.8
+
+required_directory_structure:
+  - "{{ dir_base }}"
+  - "{{ dir_base }}/backups"
+  - "{{ dir_prod_data }}"
+  - "{{ dir_prod_data_role }}"
+  - "{{ dir_prod_data_role }}/app"
+  - "{{ dir_prod_data_role }}/app/src"
+  - "{{ dir_prod_data_role }}/artifacts"
+  - "{{ dir_prod_data_role }}/configs"
+  - "{{ dir_prod_data_role }}/resc"
+
+template_files:
+  - { src: "Dockerfile.j2", dest: "Dockerfile", mode: "0444" }
+  - { src: "version.txt.j2", dest: "app/version.txt", mode: "0444" }
+
+config_files:
+  - { src: "app/src/server.py", dest: "app/src/server.py", mode: "0444" }
+  - { src: "app/requirements.txt", dest: "app/requirements.txt", mode: "0444" }
+
+branch_name: dev
+jar_name: "python-app-{{ branch_name }}.jar"
+jar_location: "{{ apps_artifacts_location }}/{{ role_name }}/artifacts"
+
+jar_path: "/home/naveed/data/work/projects/browngrid/navkam/python-app/build/libs/{{ jar_name }}"
+url_artifact_main: "https://nexus.browngrid.net/repository/navkam/python-app/python-app-{{ branch_name }}.jar"

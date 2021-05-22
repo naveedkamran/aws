@@ -1,0 +1,32 @@
+---
+
+- name: "Run {{ role_name }} container"
+  docker_container:
+    name: "{{ role_name }}"
+    image: "{{ role_name }}:{{ branch_name }}"
+    state: started
+    ports:
+      - "{{ app.bcrm_api.port_http }}:{{ app.bcrm_api.port_http }}"
+    # networks:
+    #   - "{{ networks.db }}"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock"
+      - "{{ dir_prod_data }}/{{ project_name }}/:{{ dir_prod_data }}/{{ project_name }}/:rw"
+    env:
+      environment: production
+      JAVA_OPTS: -Xmx2G -Dfile.encoding=UTF-8 -Djava.net.preferIPv4Stack=true -Djava.net.preferIPv4Addresses=true
+  become: yes
+
+- name: "Create a network {{ networks.db }}"
+  docker_network:
+    name: "{{ networks.db }}"
+    state: present
+  become: yes
+
+- name: "Add {{ role_name }} container to network {{ networks.db }} leaving existing containers connected"
+  docker_network:
+    name: "{{ networks.db }}"
+    connected:
+      - "{{ role_name }}"
+    appends: yes
+  become: true

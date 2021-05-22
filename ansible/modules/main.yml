@@ -1,0 +1,15 @@
+---
+- name: "Setup our products and update them"
+  vars_files:
+    -  ../vars/global.yml
+    -  ../vars/profile-{{profile_name}}.yml
+  roles:
+    - role: python-app
+      tags:
+        - python-app
+        - apps
+        - serverapps
+
+  hosts: "{{ target_host }}"
+  handlers:
+    - include: ../handlers/main.yml
