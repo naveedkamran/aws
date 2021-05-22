@@ -1,0 +1,1 @@
+postgres_db_connectionString: jdbc:postgresql://db-postgres-master:5432/bcrm
