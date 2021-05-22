@@ -1,0 +1,63 @@
+project_name: navkam
+user_main: navkam
+user_main_pass: "$6$Udsolfksewoisoek$zoN6EGpNfNuIr.Z7pkrOnFUrMu4TTOGvpxwRqUO67of0ByWm0EfHtKMVOjSCWKgC7BIyLl/ZQfjRjiQ92s23R0"
+group_main: deployer
+server_admin_email: naveed@navkam.com
+main_user: navkam
+
+# Artifacts system (Artifactory or Nexus) Creds
+AS_USERNAME: "deployer"
+AS_PASS: "bugwS8eYnHGpxHVAhU3NKPoo6ppheFgfr3pvsk"
+
+apps_artifacts_location: "/opt/navkam/prod-data/jenkins/artifacts"
+nginx_dir_confs: "/opt/navkam/prod-data/nginx/configs"
+
+domain_name:
+  main: navkam.net
+
+app:
+  python_app:
+    name: python-app
+    domain: api
+    port_http: 9996
+    port_https: 9996
+dir_base: /opt/navkam
+dir_prod_data: "{{ dir_base }}/prod-data"
+
+required_directory_structure:
+  - "{{ dir_base }}"
+  - "{{ dir_base }}/backups"
+  - "{{ dir_prod_data }}"
+
+company_info:
+  county_code: DE
+  common_name: navkam.com
+  organization_name: navkam
+  organizational_unit_name: DEV
+  state_or_province_name: Berlin
+
+tls_applications:
+  - python-app
+
+time_zone: "Europe/Berlin"
+
+networks:
+  general: general
+  db: db-net
+  front_end: front_end-net
+  registry: registry-net
+
+certs_home: "{{ dir_prod_data }}/certs"
+ca_home: "{{ certs_home }}/ca"
+ca_key: navkam_ca.key
+ca_cert: navkam_ca.pem
+ca_key_path: "{{ ca_home }}/{{ ca_key }}"
+ca_cert_path: "{{ ca_home }}/{{ ca_cert }}"
+docker_compose_version: "3.7"
+
+#prod
+URL_BCRM_API: "//api.navkam.net/api/v1"
+
+docker_registry_url: "registry.browngrid.net"
+docker_registry_username: "browngrid9"
+docker_registry_password: "k#87mEAP"

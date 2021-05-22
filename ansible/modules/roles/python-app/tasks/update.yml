@@ -1,0 +1,66 @@
+---
+- name: "Generating template files"
+  template:
+    src: ../templates/{{ item.src }}
+    dest: "{{ dir_prod_data_role }}/{{ item.dest }}"
+    mode: "{{ item.mode }}"
+  with_items: "{{ template_files }}"
+  become: yes
+
+- name: "Copying config files"
+  copy:
+    src: "{{ item.src }}"
+    dest: "{{ dir_prod_data_role }}/{{ item.dest }}"
+    mode: "{{ item.mode }}"
+  with_items: "{{ config_files }}"
+  become: yes
+
+- name: "Generating global template files"
+  template:
+    src: ../templates/{{ item.src }}
+    dest: "{{ item.dest }}"
+    mode: "{{ item.mode }}"
+  with_items: "{{ global_template_files }}"
+  become: yes
+
+- name: "Creating freemarker directory structure for {{ role_name }}"
+  file:
+    path: "{{ dir_prod_data_role }}/{{ item }}"
+    state: directory
+    mode: "0777"
+    recurse: yes
+    owner: root
+  with_items:
+    - "{{ freemarker_directory_structure }}"
+  become: yes
+  register: directory_creation_status
+
+- name: "Generating freemarker template files"
+  template:
+    src: ./freemarker/{{ item.src }}
+    dest: "{{ dir_prod_data_role }}/resc/freemarker/{{ item.dest }}"
+    mode: "{{ item.mode }}"
+  with_items: "{{ freemarker_template_files }}"
+  become: yes
+
+- name: "Restarting nginx"
+  command: /bin/true
+  notify: restart nginx
+
+- name: "Create a network {{ networks.db }}"
+  docker_network:
+    name: "{{ networks.db }}"
+    state: present
+  become: yes
+
+- name: "Add {{ role_name }} container to network {{ networks.db }} leaving existing containers connected"
+  docker_network:
+    name: "{{ networks.db }}"
+    connected:
+      - "{{ role_name }}"
+    appends: yes
+  become: true
+
+- name: "Restart {{ role_name }} container"
+  command: "docker restart {{ role_name }}"
+  become: true

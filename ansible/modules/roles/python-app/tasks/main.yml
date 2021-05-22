@@ -1,0 +1,24 @@
+---
+- name: "Checking value of action"
+  debug:
+    msg: "action = {{ action }}"
+
+- name: "Including build playbook"
+  include_tasks: "build.yml"
+  when:
+    - action == 'all' or action == 'build'
+
+- name: "Including run playbook"
+  include_tasks: "run.yml"
+  when:
+    - action == 'all' or action == 'run'
+
+- name: "Including backup playbook"
+  include_tasks: "backup.yml"
+  when:
+    - action == 'backup'
+
+- name: "Including update playbook"
+  include_tasks: "update.yml"
+  when:
+    - action == 'update'
