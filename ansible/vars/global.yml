@@ -7,7 +7,7 @@ main_user: navkam
 
 # Artifacts system (Artifactory or Nexus) Creds
 AS_USERNAME: "deployer"
-AS_PASS: "bugwS8eYnHGpxHVAhU3NKPoo6ppheFgfr3pvsk"
+AS_PASS: ""
 
 apps_artifacts_location: "/opt/navkam/prod-data/jenkins/artifacts"
 nginx_dir_confs: "/opt/navkam/prod-data/nginx/configs"
@@ -58,6 +58,6 @@ docker_compose_version: "3.7"
 #prod
 URL_BCRM_API: "//api.navkam.net/api/v1"
 
-docker_registry_url: "registry.browngrid.net"
-docker_registry_username: "browngrid9"
-docker_registry_password: "k#87mEAP"
+docker_registry_url: "registry.navkam.com"
+docker_registry_username: ""
+docker_registry_password: ""
